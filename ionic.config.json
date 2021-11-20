@@ -1,0 +1,7 @@
+{
+  "name": "crud-jogos-firestore",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
