@@ -23,11 +23,10 @@
         </div>
  
         <ion-grid>
-          <ion-row v-for="jogo in lista" :key="jogo.id">
-            <ion-col>
-              {{ jogo.nome }}
-
-            </ion-col>
+          <ion-row class="ion-align-items-center" v-for="jogo in lista" :key="jogo.id">
+            <ion-col> {{ jogo.nome }} </ion-col>
+            <ion-col size="2"><ion-button color="warning">E</ion-button></ion-col>
+            <ion-col size="2"><ion-button color="danger" @click="apagar(jogo.id)">X</ion-button></ion-col>
           </ion-row>
         </ion-grid>
       </div>
@@ -39,7 +38,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonButton, IonInput } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { db } from '../firebase';
-import { collection, getDocs, addDoc } from "firebase/firestore"; 
+import { collection, getDocs, addDoc, doc, deleteDoc } from "firebase/firestore"; 
 
 export default defineComponent({
   name: 'Home',
@@ -81,6 +80,10 @@ export default defineComponent({
         } catch (e) {
           console.error("Error adding document: ", e);
         }
+      },
+      apagar: async function(id) {
+        await deleteDoc(doc(db, 'jogos', id));
+        this.atualizar();
       }
     }
   });
