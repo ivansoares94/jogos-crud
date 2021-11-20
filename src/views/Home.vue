@@ -14,11 +14,19 @@
       </ion-header>
     
       <div id="container">
-
+        <div>
+          <ion-input type="text" placeholder="Nome do jogo" v-model="jogo.nome"></ion-input>
+          <ion-input type="text" placeholder="Ano lançamento" v-model="jogo.ano"></ion-input>
+          <ion-input type="text" placeholder="Gênero" v-model="jogo.genero"></ion-input>
+          <ion-input type="text" placeholder="Multijogador" v-model="jogo.multijogador"></ion-input>
+          <ion-button @click="salvar"> Salvar </ion-button>
+        </div>
+ 
         <ion-grid>
           <ion-row v-for="jogo in lista" :key="jogo.id">
             <ion-col>
               {{ jogo.nome }}
+
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -28,10 +36,10 @@
 </template>
 
 <script>
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonButton, IonInput } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { db } from '../firebase';
-import { collection, getDocs } from "firebase/firestore"; 
+import { collection, getDocs, addDoc } from "firebase/firestore"; 
 
 export default defineComponent({
   name: 'Home',
@@ -43,19 +51,37 @@ export default defineComponent({
     IonToolbar,
     IonGrid,
     IonCol,
-    IonRow
+    IonRow,
+    IonButton,
+    IonInput
   },
   data() {
     return {
+      jogo: {},
       lista: []
     }
   },
     created: async function() {
-      const querySnapshot = await getDocs(collection(db, "jogos"));
-      querySnapshot.forEach((doc) => {
-        const jogo = { id: doc.id, ...doc.data() };
-        this.lista.push(jogo);
+      this.atualizar();
+    },
+    methods: {
+      atualizar: async function() {
+        this.lista = [];
+        const querySnapshot = await getDocs(collection(db, "jogos"));
+        querySnapshot.forEach((doc) => {
+          const jogo = { id: doc.id, ...doc.data() };
+          this.lista.push(jogo);
       });
+      },
+      salvar: async function() {
+        try {
+          const docRef = await addDoc(collection(db, "jogos"), this.jogo);
+          console.log("Document written with ID: ", docRef.id);
+          this.atualizar();
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+      }
     }
   });
 </script>
@@ -65,6 +91,9 @@ export default defineComponent({
   text-align: center;
   margin: 20px;
 }
-
+ion-input {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
 
 </style>
