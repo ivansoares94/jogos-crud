@@ -16,26 +16,35 @@
       <div id="container">
         <div>
           <ion-input type="text" placeholder="Nome do jogo" v-model="jogo.nome"></ion-input>
+          <br>
           <ion-input type="text" placeholder="Ano lançamento" v-model="jogo.ano"></ion-input>
+          <br>
           <ion-input type="text" placeholder="Gênero" v-model="jogo.genero"></ion-input>
+          <br>
           <ion-input type="text" placeholder="Multijogador" v-model="jogo.multijogador"></ion-input>
+          <br>
           <ion-button @click="salvar"> Salvar </ion-button>
+          <br>
         </div>
+    
+        <ion-list>
+          <ion-item v-for="jogo in lista" :key="jogo.id">
+            <ion-label>Nome: {{ jogo.nome }}</ion-label>
+                <ion-label>Ano: {{ jogo.ano }}</ion-label>
+                <ion-label>Genêro: {{ jogo.genero }}</ion-label>
+            <ion-label>Multijogador: {{ jogo.multijogador }}</ion-label>
+             <ion-col size="2"><ion-button color="warning" @click="editar(jogo.id)">Editar</ion-button></ion-col>
+            <ion-col size="2"><ion-button color="danger" @click="apagar(jogo.id)">Excluir</ion-button></ion-col>
+          </ion-item>
+        </ion-list>
  
-        <ion-grid>
-          <ion-row class="ion-align-items-center" v-for="jogo in lista" :key="jogo.id">
-            <ion-col> {{ jogo.nome }} </ion-col>
-            <ion-col size="2"><ion-button color="warning" @click="editar(jogo.id)">E</ion-button></ion-col>
-            <ion-col size="2"><ion-button color="danger" @click="apagar(jogo.id)">X</ion-button></ion-col>
-          </ion-row>
-        </ion-grid>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonButton, IonInput } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCol, IonButton, IonInput } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { db } from '../firebase';
 import { collection, getDocs, addDoc, doc, deleteDoc, setDoc } from "firebase/firestore"; 
@@ -48,9 +57,7 @@ export default defineComponent({
     IonPage,
     IonTitle,
     IonToolbar,
-    IonGrid,
     IonCol,
-    IonRow,
     IonButton,
     IonInput
   },
@@ -70,20 +77,27 @@ export default defineComponent({
         querySnapshot.forEach((doc) => {
           const jogo = { id: doc.id, ...doc.data() };
           this.lista.push(jogo);
+          console.log(this.lista)
       });
       },
       salvar: async function() {
         try {
-          if (this.jogo.id) {
+         if(this.jogo.nome != null || ''){
+            if (this.jogo.id) {
             const jogoSemId = this.jogo;
             delete(jogoSemId.id);
             await setDoc(doc(db, 'jogos', this.jogo.id), this.jogo);
+             this.jogo = {};
           }
           else {
             const docRef = await addDoc(collection(db, "jogos"), this.jogo);
             console.log("Document written with ID: ", docRef.id);
+             this.jogo = {};
           }
           this.atualizar();
+         }else{
+           window.alert('Preencha o nome do jogo!')
+         }
         } catch (e) {
           console.error("Error adding document: ", e);
         }
