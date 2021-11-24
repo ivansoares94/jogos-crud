@@ -122,6 +122,8 @@ export default defineComponent({
 ion-input {
   border: 1px solid lightgray;
   border-radius: 5px;
-}
+} 
+
+
 
 </style>
