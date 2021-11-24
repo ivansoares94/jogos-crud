@@ -19,10 +19,7 @@
           <br>
           <ion-input type="text" placeholder="Ano lançamento" v-model="jogo.ano"></ion-input>
           <br>
-          <ion-input type="text" placeholder="Gênero" v-model="jogo.genero"></ion-input>
-          <br>
-          <ion-input type="text" placeholder="Multijogador" v-model="jogo.multijogador"></ion-input>
-          <br>
+      
           <ion-button @click="salvar"> Salvar </ion-button>
           <br>
         </div>
@@ -31,8 +28,7 @@
           <ion-item v-for="jogo in lista" :key="jogo.id">
             <ion-label>Nome: {{ jogo.nome }}</ion-label>
                 <ion-label>Ano: {{ jogo.ano }}</ion-label>
-                <ion-label>Genêro: {{ jogo.genero }}</ion-label>
-            <ion-label>Multijogador: {{ jogo.multijogador }}</ion-label>
+                
              <ion-col size="2"><ion-button color="warning" @click="editar(jogo.id)">Editar</ion-button></ion-col>
             <ion-col size="2"><ion-button color="danger" @click="apagar(jogo.id)">Excluir</ion-button></ion-col>
           </ion-item>

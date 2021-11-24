@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "crud-jogos-firestore",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
