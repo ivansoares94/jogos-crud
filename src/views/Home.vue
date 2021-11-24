@@ -124,6 +124,4 @@ ion-input {
   border-radius: 5px;
 } 
 
-
-
 </style>
