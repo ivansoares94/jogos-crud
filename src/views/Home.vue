@@ -83,7 +83,7 @@ export default defineComponent({
             const jogoSemId = this.jogo;
             delete(jogoSemId.id);
             await setDoc(doc(db, 'jogos', this.jogo.id), this.jogo);
-             this.jogo = {};
+            this.jogo = {};
           }
           else {
             const docRef = await addDoc(collection(db, "jogos"), this.jogo);
@@ -105,6 +105,7 @@ export default defineComponent({
       editar: function(id) {
         const jogo = this.lista.find( (item) => item.id == id );
         this.jogo = { ...jogo };
+        // console.log(this.jogo);
       }
     }
   });
