@@ -78,22 +78,18 @@ export default defineComponent({
       },
       salvar: async function() {
         try {
-         if(this.jogo.nome != null || ''){
-            if (this.jogo.id) {
-            const jogoSemId = this.jogo;
-            delete(jogoSemId.id);
-            await setDoc(doc(db, 'jogos', this.jogo.id), this.jogo);
-            this.jogo = {};
-          }
+         if(this.jogo.id) {
+            const jogo = { ... this.jogo } ;
+            delete jogo.id;
+            await setDoc(doc(db, 'jogos', this.jogo.id), jogo);
+            // this.jogo = {};
+         }
           else {
             const docRef = await addDoc(collection(db, "jogos"), this.jogo);
             console.log("Document written with ID: ", docRef.id);
-             this.jogo = {};
+            //  this.jogo = {};
           }
           this.atualizar();
-         }else{
-           window.alert('Preencha o nome do jogo!')
-         }
         } catch (e) {
           console.error("Error adding document: ", e);
         }
